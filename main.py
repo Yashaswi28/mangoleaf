@@ -7,7 +7,7 @@ from torchvision import transforms
 from PIL import Image
 import timm
 import io
-
+import gradio as gr
 app = FastAPI()
 
 # Enable CORS for all origins (adjust if needed)
@@ -47,3 +47,7 @@ async def predict(file: UploadFile = File(...)):
         prediction = class_names[predicted.item()]
 
     return {"prediction": prediction}
+# Gradio interface
+iface = gr.Interface(fn=predict, inputs="image", outputs="label", title="Mango Leaf Disease Detector")
+
+iface.launch()
