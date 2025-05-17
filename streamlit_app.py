@@ -1,16 +1,62 @@
 import streamlit as st
 from PIL import Image
-from inference import load_model, predict
+from inference import predict  # make sure this function returns the predicted class
 
-st.title("🍃 Mango Leaf Disease Detection")
+# === Set Page Config ===
+st.set_page_config(
+    page_title="Mango Leaf Disease Detector 🍃",
+    layout="centered",
+)
 
-uploaded_file = st.file_uploader("Upload a mango leaf image", type=["jpg", "png", "jpeg"])
+# === Custom Background Image with CSS ===
+def set_bg():
+    st.markdown(
+        f"""
+        <style>
+        .stApp {{
+            background-image: url("https://images.unsplash.com/photo-1560807707-8cc77767d783");
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }}
+        .title-text {{
+            font-size: 36px;
+            font-weight: bold;
+            color: #ffffff;
+            text-shadow: 1px 1px 2px #000000;
+        }}
+        .info-box {{
+            background-color: rgba(255, 255, 255, 0.85);
+            padding: 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.3);
+        }}
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
 
+# === Apply background ===
+set_bg()
+
+# === App Title ===
+st.markdown("<h1 class='title-text' align='center'>🍃 Mango Leaf Disease Detection App</h1>", unsafe_allow_html=True)
+st.markdown("### Upload a mango leaf image to detect potential diseases.")
+
+# === Upload File ===
+uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
+
+# === Prediction Section ===
 if uploaded_file is not None:
     image = Image.open(uploaded_file)
     st.image(image, caption="Uploaded Image", use_column_width=True)
 
-    model = load_model()
-    prediction = predict(image, model)
+    with open("temp.jpg", "wb") as f:
+        f.write(uploaded_file.getbuffer())
 
-    st.success(f"Prediction: Class {prediction}")
+    with st.spinner("Predicting..."):
+        result = predict("temp.jpg")
+
+    # Show prediction result
+    st.markdown(f"<div class='info-box'><h4>🩺 Prediction: <span style='color:#d62728;'>{result}</span></h4></div>", unsafe_allow_html=True)
+
