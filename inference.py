@@ -2,7 +2,7 @@ import traceback
 from PIL import Image, UnidentifiedImageError
 import torch
 from torchvision import transforms
-
+import numpy as np
 def predict(image_path):
     try:
         image = Image.open(image_path)
