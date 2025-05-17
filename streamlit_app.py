@@ -66,31 +66,7 @@ uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png
 # === Prediction Section ===
 if uploaded_file is not None:
     image = Image.open(uploaded_file)
-    def show_fullscreen_image(pil_img):
-        # Convert image to base64
-    buffered = BytesIO()
-    pil_img.save(buffered, format="JPEG")
-    img_b64 = base64.b64encode(buffered.getvalue()).decode()
-
-    # Display image using HTML and CSS
-    st.markdown(
-        f"""
-        <style>
-        .fullscreen-img {{
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            object-fit: cover;
-            z-index: 0;
-        }}
-        </style>
-        <img class="fullscreen-img" src="data:image/jpeg;base64,{img_b64}" />
-        """,
-        unsafe_allow_html=True
-    )
-   
+   st.image(image, caption="Uploaded Image", use_column_width=True)
     with open("temp.jpg", "wb") as f:
         f.write(uploaded_file.getbuffer())
 
