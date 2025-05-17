@@ -16,8 +16,9 @@ def load_model():
     return model
 
 
-def predict(img_path):
-    image = Image.open(img_path).convert("RGB")
+def predict(image_path):
+    image = Image.open(image_path).convert("RGB")  # Force RGB mode
+    input_tensor = transform(image).unsqueeze(0)
     transform = transforms.Compose([
         transforms.Resize((224, 224)),
         transforms.ToTensor()
