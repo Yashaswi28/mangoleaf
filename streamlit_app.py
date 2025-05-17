@@ -15,7 +15,6 @@ def set_bg():
         <style>
         .stApp {{
             background-image: url("https://t3.ftcdn.net/jpg/05/61/96/06/360_F_561960690_uCMNRrqahIsdrOeEG7Lx5DzLPCof6GNe.jpg");
-");
             background-size: cover;
             background-repeat: no-repeat;
             background-attachment: fixed;
@@ -34,10 +33,24 @@ def set_bg():
             border-radius: 15px;
             box-shadow: 0 0 10px rgba(0,0,0,0.3);
         }}
+
+        /* Make the image container full width */
+        div[data-testid="stImage"] > img {{
+            width: 100vw !important;       /* 100% viewport width */
+            height: auto !important;       /* keep aspect ratio */
+            margin-left: calc(-50vw + 50%);
+        }}
+
+        /* Remove horizontal padding around the image */
+        .block-container {{
+            padding-left: 0rem;
+            padding-right: 0rem;
+        }}
         </style>
         """,
         unsafe_allow_html=True
     )
+
 
 # === Apply background ===
 set_bg()
