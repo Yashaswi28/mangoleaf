@@ -5,7 +5,7 @@ from torchvision import transforms
 from PIL import Image
 import requests
 def load_model():
-    model = torch.load(""C:\Users\suraj\Desktop\abc\vit_mango_disease.pth"", map_location=torch.device("cpu"))
+    model = torch.load("C:\Users\suraj\Desktop\abc\vit_mango_disease.pth", map_location=torch.device("cpu"))
     model.eval()
     return model
 
