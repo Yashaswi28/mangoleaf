@@ -25,5 +25,5 @@ def predict(img_path):
     with torch.no_grad():
         outputs = model(input_tensor)
         _, predicted = torch.max(outputs, 1)
-    class_names = ["Anthracnose", "Bacterial Canker", "Healthy", "Powdery Mildew"]  # adjust as per your labels
+    class_names = ['Anthracnose', 'Bacterial Canker', 'Cutting Weevil', 'Die Back', 'Gall Midge', 'Healthy', 'Powdery Mildew', 'Sooty Mould']  # adjust as per your labels
     return class_names[predicted.item()]
