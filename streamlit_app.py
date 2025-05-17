@@ -19,6 +19,8 @@ def set_bg():
             background-size: cover;
             background-repeat: no-repeat;
             background-attachment: fixed;
+            background-position: center;
+            height: 100vh;       
         }}
         .title-text {{
             font-size: 36px;
