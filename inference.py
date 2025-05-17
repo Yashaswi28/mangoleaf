@@ -1,10 +1,15 @@
 import torch
 from torchvision import transforms
 from PIL import Image
+import requests
 
 # Load model from Hugging Face or local
 def load_model():
-    model = torch.load("C:/Users/suraj/Desktop/abc/vit_mango_disease.pth", map_location=torch.device("cpu"))
+    url = "https://huggingface.co/spaces/yashaswia/mango-disease-detector/blob/main/vit_mango_disease.pth"
+    response = requests.get(url)
+    with open("vit_mango_disease.pth", "wb") as f:
+        f.write(response.content)
+    model = torch.load("vit_mango_disease.pth", map_location=torch.device("cpu"))
     model.eval()
     return model
 
