@@ -4,7 +4,7 @@ from inference import predict  # make sure this function returns the predicted c
 import base64
 from io import BytesIO
 import numpy as np
-st.write("NumPy version:", np.__version__)
+
 
 # === Set Page Config ===
 st.set_page_config(
