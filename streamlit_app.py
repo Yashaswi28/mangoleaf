@@ -3,6 +3,9 @@ from PIL import Image
 from inference import predict  # make sure this function returns the predicted class
 import base64
 from io import BytesIO
+import numpy as np
+st.write("NumPy version:", np.__version__)
+
 # === Set Page Config ===
 st.set_page_config(
     page_title="Mango Leaf Disease Detector 🍃",
