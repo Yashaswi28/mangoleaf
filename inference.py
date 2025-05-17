@@ -1,9 +1,9 @@
+
+
 import torch
 from torchvision import transforms
 from PIL import Image
 import requests
-
-# Load model from Hugging Face or local
 def load_model():
     url = "https://huggingface.co/spaces/yashaswia/mango-disease-detector/blob/main/vit_mango_disease.pth"
     response = requests.get(url)
@@ -13,12 +13,17 @@ def load_model():
     model.eval()
     return model
 
-def predict(image, model):
+model = load_model()
+
+def predict(img_path):
+    image = Image.open(img_path).convert("RGB")
     transform = transforms.Compose([
         transforms.Resize((224, 224)),
-        transforms.ToTensor(),
+        transforms.ToTensor()
     ])
-    img = transform(image).unsqueeze(0)
-    output = model(img)
-    _, predicted = torch.max(output, 1)
-    return predicted.item()
+    input_tensor = transform(image).unsqueeze(0)
+    with torch.no_grad():
+        outputs = model(input_tensor)
+        _, predicted = torch.max(outputs, 1)
+    class_names = ["Anthracnose", "Bacterial Canker", "Healthy", "Powdery Mildew"]  # adjust as per your labels
+    return class_names[predicted.item()]
