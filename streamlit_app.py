@@ -66,8 +66,8 @@ uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png
 # === Prediction Section ===
 if uploaded_file is not None:
     image = Image.open(uploaded_file)
-   def show_fullscreen_image(pil_img):
-    # Convert image to base64
+    def show_fullscreen_image(pil_img):
+        # Convert image to base64
     buffered = BytesIO()
     pil_img.save(buffered, format="JPEG")
     img_b64 = base64.b64encode(buffered.getvalue()).decode()
@@ -90,7 +90,7 @@ if uploaded_file is not None:
         """,
         unsafe_allow_html=True
     )
-
+   
     with open("temp.jpg", "wb") as f:
         f.write(uploaded_file.getbuffer())
 
