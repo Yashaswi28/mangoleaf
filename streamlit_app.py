@@ -15,6 +15,7 @@ def set_bg():
         <style>
         .stApp {{
             background-image: url("https://images.unsplash.com/photo-1560807707-8cc77767d783");
+");
             background-size: cover;
             background-repeat: no-repeat;
             background-attachment: fixed;
