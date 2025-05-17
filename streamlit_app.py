@@ -65,13 +65,15 @@ uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png
 
 # === Prediction Section ===
 if uploaded_file is not None:
-    image = Image.open(uploaded_file)
+    image = Image.open(uploaded_file).convert("RGB")
     st.image(image, caption="Uploaded Image", use_column_width=True)
-    with open("temp.jpg", "wb") as f:
-        f.write(uploaded_file.getbuffer())
+
+    # Save the image properly as RGB
+    image.save("temp.jpg", format="JPEG")
 
     with st.spinner("Predicting..."):
         result = predict("temp.jpg")
+
 
     # Show prediction result
     st.markdown(f"<div class='info-box'><h4>🩺 Prediction: <span style='color:#d62728;'>{result}</span></h4></div>", unsafe_allow_html=True)
