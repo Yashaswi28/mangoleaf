@@ -28,3 +28,9 @@ def predict(image_path):
 
     # Return dummy output for now
     return "Test Passed"
+    except Exception as e:
+    import traceback
+    print("=== DEBUG ERROR ===")
+    print(traceback.format_exc())
+    raise RuntimeError(f"Failed to transform image: {str(e)}")
+
