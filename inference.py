@@ -3,29 +3,23 @@ from torchvision import transforms
 from PIL import Image
 
 import requests
+import traceback
+import streamlit as st
 
-def load_model():
-    url = "https://huggingface.co/spaces/yashaswia/mango-disease-detector/blob/main/vit_mango_disease.pth"
-    response = requests.get(url)
-    with open("vit_mango_disease.pth", "wb") as f:
-        f.write(response.content)
+def predict(image_path):
+    try:
+        # Load and preprocess image
+        image = Image.open(image_path).convert("RGB")
+        transform = transforms.Compose([
+            transforms.Resize((224, 224)),
+            transforms.ToTensor()
+        ])
+        input_tensor = transform(image).unsqueeze(0)
 
-    model = torch.load("vit_mango_disease.pth", map_location=torch.device("cpu"))
-    model.eval()
-    return model
+        return "Test Passed"
 
-
-model = load_model()
-
-def predict(img_path):
-    image = Image.open(img_path).convert("RGB")
-    transform = transforms.Compose([
-        transforms.Resize((224, 224)),
-        transforms.ToTensor()
-    ])
-    input_tensor = transform(image).unsqueeze(0)
-    with torch.no_grad():
-        outputs = model(input_tensor)
-        _, predicted = torch.max(outputs, 1)
-    class_names = ['Anthracnose', 'Bacterial Canker', 'Cutting Weevil', 'Die Back', 'Gall Midge', 'Healthy', 'Powdery Mildew', 'Sooty Mould']
-    return class_names[predicted.item()]
+    except Exception as e:
+        full_trace = traceback.format_exc()
+        st.error("An error occurred while transforming the image.")
+        st.text(full_trace)  # Show the error on the Streamlit UI
+        raise RuntimeError(f"Failed to transform image: {str(e)}")
