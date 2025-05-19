@@ -3,6 +3,7 @@ from PIL import Image, UnidentifiedImageError
 import torch
 from torchvision import transforms
 import numpy as np
+import streamlit as st
 def predict(image_path):
     try:
         # Load and preprocess image
@@ -13,17 +14,12 @@ def predict(image_path):
         ])
         input_tensor = transform(image).unsqueeze(0)
 
-        # Dummy return for testing
         return "Test Passed"
 
     except Exception as e:
-        # Save full traceback
-        with open("error_log.txt", "w") as f:
-            f.write(traceback.format_exc())
-        # Print it in console too
-        print("=== FULL TRACEBACK ===")
-        print(traceback.format_exc())
-
+        full_trace = traceback.format_exc()
+        st.error("An error occurred while transforming the image.")
+        st.text(full_trace)  # Show the error on the Streamlit UI
         raise RuntimeError(f"Failed to transform image: {str(e)}")
     # Return dummy output for now
     return "Test Passed"
