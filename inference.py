@@ -4,7 +4,7 @@ import torch
 from torchvision import transforms
 import numpy as np
 import streamlit as st
-model = torch.load("model.pth", map_location=torch.device("cpu"))
+model = torch.load("https://huggingface.co/spaces/yashaswia/mango-disease-detector/blob/main/vit_mango_disease.pth", map_location=torch.device("cpu"))
 model.eval()
 
 # Define the same class names used during training
