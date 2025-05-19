@@ -1,50 +1,31 @@
-# inference.py
-
 import torch
-import torchvision.transforms as transforms
-from torchvision.models import vit_b_16
+from torchvision import transforms
 from PIL import Image
+
 import requests
-import os
 
-# Define the number of classes
-NUM_CLASSES = 4
+def load_model():
+    url = "https://huggingface.co/spaces/yashaswia/mango-disease-detector/blob/main/vit_mango_disease.pth"
+    response = requests.get(url)
+    with open("vit_mango_disease.pth", "wb") as f:
+        f.write(response.content)
 
-# Define class names in the correct order
-class_names = ['Anthracnose', 'Bacterial Canker', 'Powdery Mildew', 'Healthy']
+    model = torch.load("vit_mango_disease.pth", map_location=torch.device("cpu"))
+    model.eval()
+    return model
 
-# Define the transform
-transform = transforms.Compose([
-    transforms.Resize((224, 224)),
-    transforms.ToTensor(),
-    transforms.Normalize([0.5], [0.5])
-])
 
-# Download model weights if not already present
-model_url = "https://huggingface.co/spaces/yashaswia/mango-disease-detector/resolve/main/vit_mango_disease.pth"
-model_path = "vit_mango_disease.pth"
+model = load_model()
 
-if not os.path.exists(model_path):
-    print("🔽 Downloading model weights...")
-    r = requests.get(model_url)
-    with open(model_path, "wb") as f:
-        f.write(r.content)
-
-# Load model architecture and weights
-model = vit_b_16(pretrained=False)
-model.heads.head = torch.nn.Linear(model.heads.head.in_features, NUM_CLASSES)
-state_dict = torch.load(model_path, map_location=torch.device("cpu"))
-model.load_state_dict(state_dict)
-model.eval()
-
-# Prediction function
-def predict(image_path):
-    try:
-        image = Image.open(image_path).convert("RGB")
-        input_tensor = transform(image).unsqueeze(0)
-        with torch.no_grad():
-            outputs = model(input_tensor)
-            _, predicted = torch.max(outputs, 1)
-        return class_names[predicted.item()]
-    except Exception as e:
-        raise RuntimeError(f"Failed to transform or predict image: {str(e)}")
+def predict(img_path):
+    image = Image.open(img_path).convert("RGB")
+    transform = transforms.Compose([
+        transforms.Resize((224, 224)),
+        transforms.ToTensor()
+    ])
+    input_tensor = transform(image).unsqueeze(0)
+    with torch.no_grad():
+        outputs = model(input_tensor)
+        _, predicted = torch.max(outputs, 1)
+    class_names = ['Anthracnose', 'Bacterial Canker', 'Cutting Weevil', 'Die Back', 'Gall Midge', 'Healthy', 'Powdery Mildew', 'Sooty Mould']
+    return class_names[predicted.item()]
