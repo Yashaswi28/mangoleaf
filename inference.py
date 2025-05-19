@@ -4,8 +4,23 @@ import torch
 from torchvision import transforms
 import numpy as np
 import streamlit as st
-model = torch.load("https://huggingface.co/spaces/yashaswia/mango-disease-detector/blob/main/vit_mango_disease.pth", map_location=torch.device("cpu"))
+import os
+import requests
+model_path = "vit_mango_disease.pth"
+model_url = "https://huggingface.co/spaces/yashaswia/mango-disease-detector/resolve/main/vit_mango_disease.pth"
+
+# Download if not already present
+if not os.path.exists(model_path):
+    print("Downloading model...")
+    r = requests.get(model_url)
+    with open(model_path, "wb") as f:
+        f.write(r.content)
+    print("Model downloaded.")
+
+# Load model
+model = torch.load(model_path, map_location=torch.device("cpu"))
 model.eval()
+
 
 # Define the same class names used during training
 class_names = ["Anthracnose", "Bacterial Canker", "Cutting Weevil", "Gall Midge", "Healthy", "Powdery Mildew", "Sooty Mould"]
